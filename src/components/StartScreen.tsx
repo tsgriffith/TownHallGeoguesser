@@ -16,7 +16,7 @@ function StartScreen({ onStart }: StartScreenProps) {
 
   return (
     <div className="start-screen">
-      <h1>Griffith Location Geo-Guesser</h1>
+      <h1>Griffith Foods Location Geo-Guesser</h1>
       <p className="subtitle">
         Match 10 images to their Griffith Foods locations around the world.
         <br />

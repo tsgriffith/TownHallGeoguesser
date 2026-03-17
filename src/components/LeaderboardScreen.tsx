@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchScores, type ScoreRow } from "../lib/supabase";
 
 interface LeaderboardScreenProps {
@@ -14,11 +14,36 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-const TROPHY: Record<number, string> = { 0: "??", 1: "??", 2: "??" };
+const TROPHY: Record<number, string> = { 0: "\u{1F947}", 1: "\u{1F948}", 2: "\u{1F949}" };
 
 function LeaderboardScreen({ currentName, currentScore, currentTime, onPlayAgain }: LeaderboardScreenProps) {
   const [rows, setRows] = useState<ScoreRow[]>([]);
   const [error, setError] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [cooldown, setCooldown] = useState(120);
+  const cooldownRef = useRef(cooldown);
+
+  useEffect(() => {
+    cooldownRef.current = cooldown;
+  });
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const id = setTimeout(() => setCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(id);
+  }, [cooldown]);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      const data = await fetchScores();
+      setRows(data);
+      setError(false);
+    } catch {
+      setError(true);
+    }
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     let active = true;
@@ -36,7 +61,7 @@ function LeaderboardScreen({ currentName, currentScore, currentTime, onPlayAgain
     };
 
     load();
-    const id = setInterval(load, 10_000);
+    const id = setInterval(load, 5_000);
     return () => { active = false; clearInterval(id); };
   }, []);
 
@@ -58,7 +83,12 @@ function LeaderboardScreen({ currentName, currentScore, currentTime, onPlayAgain
         </div>
       )}
 
-      <h2 className="leaderboard-heading">Leaderboard</h2>
+      <div className="leaderboard-heading-row">
+        <h2 className="leaderboard-heading">Leaderboard</h2>
+        <button className="refresh-btn" onClick={handleRefresh} disabled={refreshing}>
+          {refreshing ? "Refreshing..." : "\u{1F504} Refresh"}
+        </button>
+      </div>
 
       {error && <p className="leaderboard-error">Could not load scores.</p>}
 
@@ -91,9 +121,15 @@ function LeaderboardScreen({ currentName, currentScore, currentTime, onPlayAgain
       )}
 
       {onPlayAgain && (
-        <button className="play-again-btn" onClick={onPlayAgain}>
-          Play Again
-        </button>
+        cooldown > 0 ? (
+          <div className="cooldown-dialog">
+            <p>You can play again in <strong>{formatTime(cooldown)}</strong></p>
+          </div>
+        ) : (
+          <button className="play-again-btn" onClick={onPlayAgain}>
+            Play Again
+          </button>
+        )
       )}
     </div>
   );

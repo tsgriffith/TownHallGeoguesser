@@ -46,3 +46,18 @@ const res = await fetch(
   }
   return res.json();
 }
+
+export async function fetchGameEnabled(): Promise<boolean> {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return true;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/config?key=eq.game_enabled&select=value`,
+      { method: "GET", headers }
+    );
+    if (!res.ok) return true;
+    const data = await res.json();
+    return data.length === 0 || data[0].value === "true";
+  } catch {
+    return true;
+  }
+}

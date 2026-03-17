@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StartScreen from "./components/StartScreen";
 import GameScreen from "./components/GameScreen";
 import LeaderboardScreen from "./components/LeaderboardScreen";
-import { postScore } from "./lib/supabase";
+import { postScore, fetchGameEnabled } from "./lib/supabase";
 import "./App.css";
 
 const SUBMITTED_KEY = "griffith-geo-submitted";
@@ -15,6 +15,17 @@ function App() {
   const [playerName, setPlayerName] = useState("");
   const [finalScore, setFinalScore] = useState(0);
   const [finalTime, setFinalTime] = useState(0);
+  const [gameEnabled, setGameEnabled] = useState(true);
+
+  useEffect(() => {
+    const check = async () => {
+      const enabled = await fetchGameEnabled();
+      setGameEnabled(enabled);
+    };
+    check();
+    const id = setInterval(check, 5_000);
+    return () => clearInterval(id);
+  }, []);
 
   const handleStart = (name: string) => {
     setPlayerName(name);
@@ -46,14 +57,20 @@ function App() {
 
   return (
     <div className="app">
-      {screen === "start" && <StartScreen onStart={handleStart} />}
+      {screen === "start" && !gameEnabled && (
+        <div className="disabled-screen">
+          <h1>Griffith Location Geo-Guesser</h1>
+          <p className="disabled-message">Disabled until the town hall is over...you can try again later</p>
+        </div>
+      )}
+      {screen === "start" && gameEnabled && <StartScreen onStart={handleStart} />}
       {screen === "game" && <GameScreen onFinish={handleFinish} />}
       {screen === "leaderboard" && (
         <LeaderboardScreen
           currentName={playerName}
           currentScore={finalScore}
           currentTime={finalTime}
-          onPlayAgain={handlePlayAgain}
+          onPlayAgain={gameEnabled ? handlePlayAgain : undefined}
         />
       )}
     </div>

@@ -88,8 +88,9 @@ button:disabled {
   font-size: 2rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   color: #2d2d2d;
+  text-align: center;
 }
 
 .timer-urgent {
@@ -106,6 +107,7 @@ button:disabled {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
+  align-items: start;
 }
 
 .game-column h2 {
@@ -113,6 +115,11 @@ button:disabled {
   margin-bottom: 0.75rem;
   color: #006838;
   text-align: center;
+}
+
+.game-column:last-child {
+  position: sticky;
+  top: 1rem;
 }
 
 /* Image cards */
@@ -128,19 +135,18 @@ button:disabled {
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
-  background: white;
+  background: #f7f7f5;
   transition: border-color 0.15s;
 }
 
 .image-card img {
   width: 100%;
-  height: 120px;
-  object-fit: cover;
+  height: auto;
   display: block;
 }
 
 .image-card.selected {
-  border-color: #006838;
+  border-color: #f97316;
 }
 
 .image-card.assigned {
@@ -151,8 +157,17 @@ button:disabled {
   padding: 0.35rem 0.6rem;
   background: #e8f5e9;
   font-size: 0.85rem;
+  font-weight: 700;
   color: #005028;
   text-align: center;
+}
+
+.unassigned-badge {
+padding: 0.35rem 0.6rem;
+background: #fff3e0;
+font-size: 1.06rem;
+color: #b45309;
+text-align: center;
 }
 
 /* Location buttons */
@@ -198,7 +213,8 @@ button:disabled {
 
 .submit-btn {
   display: block;
-  margin: 2rem auto 0;
+  width: 100%;
+  margin-top: 1rem;
   padding: 0.8rem 2.5rem;
   font-size: 1.1rem;
 }
@@ -209,10 +225,6 @@ button:disabled {
   .game-layout {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-  }
-
-  .image-card img {
-    height: 100px;
   }
 }
 
@@ -396,4 +408,78 @@ button:disabled {
 
 .play-again-btn:hover {
   background: #005028;
+}
+
+.cooldown-dialog {
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  background: white;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1rem;
+  color: #555;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cooldown-dialog strong {
+  color: #006838;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Disabled screen */
+
+.disabled-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 4rem;
+}
+
+.disabled-screen h1 {
+  font-size: 2rem;
+  color: #006838;
+}
+
+.disabled-message {
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Leaderboard heading row */
+
+.leaderboard-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.leaderboard-heading-row .leaderboard-heading {
+  margin-bottom: 0;
+}
+
+.refresh-btn {
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  background: #006838;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 0;
+}
+
+.refresh-btn:hover {
+  background: #005028;
+}
+
+.refresh-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
 }

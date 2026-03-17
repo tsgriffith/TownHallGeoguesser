@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import locations from "../data/locations";
 import Timer from "./Timer";
 
@@ -23,6 +23,11 @@ function GameScreen({ onFinish }: GameScreenProps) {
 
   // assignments: imageId -> locationId
   const [assignments, setAssignments] = useState<Record<number, number>>({});
+  const assignmentsRef = useRef(assignments);
+
+  useEffect(() => {
+    assignmentsRef.current = assignments;
+  });
   const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
@@ -33,16 +38,17 @@ function GameScreen({ onFinish }: GameScreenProps) {
     if (submitted) return;
     setSubmitted(true);
 
+    const currentAssignments = assignmentsRef.current;
     const elapsed = Math.min(
       Math.round((Date.now() - startTime) / 1000),
       DURATION
     );
     let score = 0;
     for (const loc of locations) {
-      if (assignments[loc.id] === loc.id) score++;
+      if (currentAssignments[loc.id] === loc.id) score++;
     }
     onFinish(score, elapsed);
-  }, [submitted, assignments, onFinish, startTime]);
+  }, [submitted, onFinish, startTime]);
 
   const handleTimerExpire = useCallback(() => {
     handleSubmit();
@@ -99,11 +105,9 @@ function GameScreen({ onFinish }: GameScreenProps) {
 
   return (
     <div className="game-screen">
-      <Timer durationSeconds={DURATION} onExpire={handleTimerExpire} />
-
       <div className="game-layout">
         <div className="game-column">
-          <h2>Images</h2>
+          <h2>Where in the world?</h2>
           <div className="image-list">
             {locations.map((loc) => (
               <div
@@ -112,10 +116,12 @@ function GameScreen({ onFinish }: GameScreenProps) {
                 onClick={() => handleImageClick(loc.id)}
               >
                 <img src={loc.image} alt={`Location ${loc.id}`} />
-                {assignments[loc.id] != null && (
+                {assignments[loc.id] != null ? (
                   <div className="assignment-badge">
                     {locations.find((l) => l.id === assignments[loc.id])?.name}
                   </div>
+                ) : (
+                  <div className="unassigned-badge"><b>Where in the world?</b></div>
                 )}
               </div>
             ))}
@@ -123,7 +129,8 @@ function GameScreen({ onFinish }: GameScreenProps) {
         </div>
 
         <div className="game-column">
-          <h2>Locations</h2>
+          <Timer durationSeconds={DURATION} onExpire={handleTimerExpire} />
+          <h2>Griffith Worldwide Locations</h2>
           <div className="location-list">
             {shuffledLocations.map((loc) => {
               const used = assignedLocationIds.has(loc.id);
@@ -139,16 +146,15 @@ function GameScreen({ onFinish }: GameScreenProps) {
               );
             })}
           </div>
+          <button
+            className="submit-btn"
+            disabled={!allAssigned || submitted}
+            onClick={handleSubmit}
+          >
+            Submit Answers
+          </button>
         </div>
       </div>
-
-      <button
-        className="submit-btn"
-        disabled={!allAssigned || submitted}
-        onClick={handleSubmit}
-      >
-        Submit Answers
-      </button>
     </div>
   );
 }
