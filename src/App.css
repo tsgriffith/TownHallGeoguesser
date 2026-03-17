@@ -1,0 +1,399 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Noto Sans", Helvetica, Arial, sans-serif;
+  background: #f7f7f5;
+  color: #2d2d2d;
+}
+
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+button {
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background: #006838;
+  color: white;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+button:hover {
+  background: #005028;
+}
+
+button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.start-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 4rem;
+}
+
+.start-screen h1 {
+  font-size: 2rem;
+}
+
+.subtitle {
+  color: #555;
+  line-height: 1.6;
+}
+
+.start-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 320px;
+}
+
+.start-form input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #cbd5e1;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.start-form input:focus {
+  border-color: #006838;
+}
+
+.start-form button {
+  width: 100%;
+  margin-top: 0;
+}
+
+/* Timer */
+
+.timer {
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 1.5rem;
+  color: #2d2d2d;
+}
+
+.timer-urgent {
+  color: #C8102E;
+}
+
+/* Game layout */
+
+.game-screen {
+  text-align: left;
+}
+
+.game-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.game-column h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: #006838;
+  text-align: center;
+}
+
+/* Image cards */
+
+.image-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.image-card {
+  border: 3px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background: white;
+  transition: border-color 0.15s;
+}
+
+.image-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+.image-card.selected {
+  border-color: #006838;
+}
+
+.image-card.assigned {
+  border-color: #006838;
+}
+
+.assignment-badge {
+  padding: 0.35rem 0.6rem;
+  background: #e8f5e9;
+  font-size: 0.85rem;
+  color: #005028;
+  text-align: center;
+}
+
+/* Location buttons */
+
+.location-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.location-btn {
+  width: 100%;
+  text-align: left;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #2d2d2d;
+  cursor: pointer;
+  margin: 0;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.location-btn:hover:not(:disabled) {
+  border-color: #006838;
+  background: #e8f5e9;
+}
+
+.location-btn.used {
+  background: #e8f5e9;
+  border-color: #006838;
+  color: #005028;
+}
+
+.location-btn:disabled:not(.used) {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f9fafb;
+}
+
+/* Submit */
+
+.submit-btn {
+  display: block;
+  margin: 2rem auto 0;
+  padding: 0.8rem 2.5rem;
+  font-size: 1.1rem;
+}
+
+/* Mobile: stack columns */
+
+@media (max-width: 640px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .image-card img {
+    height: 100px;
+  }
+}
+
+/* Leaderboard */
+
+.leaderboard-screen {
+  padding-top: 3rem;
+}
+
+.leaderboard-screen h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #006838;
+}
+
+.your-result {
+  margin-bottom: 2rem;
+}
+
+.your-result-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.5rem;
+  background: white;
+  border-radius: 8px;
+  max-width: 540px;
+  margin: 0 auto;
+  font-size: 1rem;
+}
+
+.result-row.highlight {
+  border: 2px solid #006838;
+}
+
+.result-row .result-name {
+  flex: 1;
+  text-align: left;
+  font-weight: 600;
+  color: #2d2d2d;
+}
+
+.result-row .result-score {
+  width: 80px;
+  text-align: center;
+  font-weight: 700;
+  color: #006838;
+}
+
+.result-row .result-time {
+  width: 60px;
+  text-align: right;
+  color: #666;
+  font-variant-numeric: tabular-nums;
+}
+
+.leaderboard-heading {
+  font-size: 1.2rem;
+  color: #006838;
+  margin-bottom: 0.75rem;
+}
+
+.leaderboard-table {
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+.leaderboard-header {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.8rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.leaderboard-header span:first-child {
+  width: 32px;
+  text-align: left;
+}
+
+.leaderboard-header span:nth-child(2) {
+  flex: 1;
+  text-align: left;
+}
+
+.leaderboard-header span:nth-child(3) {
+  width: 80px;
+  text-align: center;
+}
+
+.leaderboard-header span:nth-child(4) {
+  width: 60px;
+  text-align: right;
+}
+
+.leaderboard-header .trophy-col,
+.leaderboard-row .trophy-col {
+  width: 36px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 1.5rem;
+  background: white;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  font-size: 0.95rem;
+}
+
+.leaderboard-row span:first-child {
+  width: 32px;
+  text-align: left;
+  color: #888;
+  font-weight: 600;
+}
+
+.leaderboard-row span:nth-child(2) {
+  flex: 1;
+  text-align: left;
+  color: #2d2d2d;
+}
+
+.leaderboard-row span:nth-child(3) {
+  width: 80px;
+  text-align: center;
+  font-weight: 700;
+  color: #006838;
+}
+
+.leaderboard-row span:nth-child(4) {
+  width: 60px;
+  text-align: right;
+  color: #666;
+  font-variant-numeric: tabular-nums;
+}
+
+.leaderboard-row span:nth-child(5) {
+  width: 36px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.leaderboard-you {
+  background: #e8f5e9;
+}
+
+.leaderboard-error {
+  color: #C8102E;
+  margin: 1rem 0;
+}
+
+.leaderboard-empty {
+  color: #888;
+  margin: 1rem 0;
+}
+
+.play-again-btn {
+  margin-top: 2rem;
+  padding: 0.7rem 2rem;
+  font-size: 1rem;
+  background: #006838;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.play-again-btn:hover {
+  background: #005028;
+}
