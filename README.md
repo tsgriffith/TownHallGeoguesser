@@ -1,73 +1,77 @@
-# React + TypeScript + Vite
+# Griffith Foods Location Geo-Guesser
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple, mobile-friendly game built for a town hall presentation.
 
-Currently, two official plugins are available:
+Participants enter their name, match 10 photos to 10 Griffith Foods locations, and submit one final answer before time runs out. A live leaderboard shows scores and completion times.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Why this was created
 
-## React Compiler
+This app was created to make a town hall session more interactive and memorable.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Instead of a passive presentation, people can join from their phone or laptop, play a short challenge, and see how they rank against others in real time. The goal was to keep it easy to use for everyone:
 
-## Expanding the ESLint configuration
+- no account creation
+- no app install
+- one link to join
+- clear, quick gameplay
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## How it works (non-technical)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. Open the game link.
+2. Enter your name.
+3. Match each image to the correct Griffith location.
+4. Submit once before the timer ends.
+5. View the leaderboard with scores and times.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## What participants will see
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- A clean start screen
+- A timed matching challenge (10 images)
+- A leaderboard after submission
+- Optional play-again flow after cooldown (when enabled)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## If a developer needs to re-create this app later
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Rebuilding this app is straightforward **once setup is complete**, but there are two parts:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. Frontend (quick)
+2. Supabase backend configuration (important and can take longer than coding)
+
+The frontend game itself is small. In practice, the Supabase setup (tables, keys, policies, env config, and testing) is the part that usually takes the most time.
+
+### Practical rebuild checklist
+
+1. Create a `React + Vite + TypeScript` app.
+2. Add 10 location records and image files in `/public/images`.
+3. Build screens:
+   - start (name input)
+   - game (matching + timer)
+   - leaderboard (scores + times)
+4. Add one-submit behavior with `sessionStorage`.
+5. Configure Supabase (required for persistent leaderboard and remote game enable/disable).
+6. Add env variables in Vite.
+7. Test score submit/read flows.
+8. Deploy to Vercel.
+
+If Supabase is not configured, the app UI still runs, but persistent scoring/leaderboard storage and remote game control are limited.
+
+## Project story and source material
+
+The game concept and location narrative came from:
+
+- `docs/copilot-paste-now.md`
+- `docs/Griffith Images with Location.md`
+
+## Technical details
+
+To keep this README easy for non-technical readers, full implementation/setup details are in:
+
+- `docs/TECHNICAL_DETAILS.md`
+
+That file includes:
+
+- exact Supabase SQL
+- practical Supabase setup sequence
+- RLS policy guidance
+- required env vars
+- local run/build/deploy commands
